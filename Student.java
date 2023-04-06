@@ -48,6 +48,9 @@ public class Student extends User implements Time{
             default:
                 this.attendance = "Waiting for teacher's confirmation";
                 StudentList.attendanceList.set(this.index, this.attendance);
+                this.hour = hour;
+                this.minute = minute;
+                this.second = second;
                 return hour + ":" + minute + ":" + second + " recorded";
         }
         
