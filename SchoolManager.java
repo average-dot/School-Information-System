@@ -169,7 +169,6 @@ class SchoolManager {
             System.out.println("Student list is empty. Please add a student first.");
             return false;
         }
-        System.out.println("A student with ID 123465789 is in the list by default.");
         PRINT_STUDENT_LIST();
         Student student;
         System.out.print("");
