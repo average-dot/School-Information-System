@@ -122,23 +122,27 @@ class SchoolManager {
                     System.out.println("Please enter an integer");
                     scan.next();
                 }
-            } while (hour < 0);
+            } while (hour < 0 || hour >= 24);
             
-            System.out.println("Please enter minute");
             do {
-                while (!scan.hasNextInt()) {
+                System.out.print("Please enter minute: ");                  
+                if (scan.hasNextInt()) {
+                    minute = scan.nextInt();                     
+                } else {
                     System.out.println("Please enter an integer");
+                    scan.next();
                 }
-                    minute = scan.nextInt();      
-            } while (minute < 0);
+            } while (minute < 0 || minute >= 60);
             
-            System.out.println("Please enter second");
             do {
-                while (!scan.hasNextInt()) {
+                System.out.print("Please enter second: ");                  
+                if (scan.hasNextInt()) {
+                    second = scan.nextInt();                     
+                } else {
                     System.out.println("Please enter an integer");
+                    scan.next();
                 }
-                    second = scan.nextInt();    
-            } while (second < 0);
+            } while (second < 0 || second >= 60);
             
             temp_output = student.attendanceTime(hour, minute, second);
             System.out.println(temp_output);
@@ -169,30 +173,35 @@ class SchoolManager {
         PRINT_STUDENT_LIST();
         Student student;
         System.out.print("");
-        int index;
+        int index = Integer.MIN_VALUE;
         int size = StudentList.studentList.size();
         do {
-            System.out.println("Please choose a student. (0,1,2, etc.)");
-            while (!scan.hasNextInt()) {
-                System.out.println("That's not an integer!");
-                System.out.println("Please choose a student. (0,1,2, etc.)");
-                scan.next(); 
-            }
-            index = scan.nextInt();
-            if(index >= size) System.out.println("Index out of bounds, please select an integer between 0 and " + (size-1) + " inclusively.");
+            do {
+                System.out.print("Please choose a student. (0,1,2, etc.): ");
+                if (scan.hasNextInt()) {
+                    index = scan.nextInt();                     
+                } else {
+                    System.out.println("That's not an integer!");
+                    scan.next(); 
+                }
+                if(index >= size) System.out.println("Index out of bounds, please select an integer between 0 and " + (size-1) + " inclusively.");
+            } while (index < 0);
         } while (index > size-1);
 
         student = StudentList.studentList.get(index);
         System.out.println(student.getName() + " selected.");
 
-        int function;
-        System.out.println("Please choose a function. (1: Attendance Time, 2: View Attendance, 3: Print Information, 0: End this session)");
-        while (!scan.hasNextInt()){
-            System.out.println("Please enter an integer.");
-            System.out.println("Please choose a function. (1: Attendance Time, 2: View Attendance, 3: Print Information, 0: End this session)");            
-            scan.next();
-        }
-        function = scan.nextInt();
+        int function = Integer.MIN_VALUE;
+        
+        do {
+            System.out.println("Please choose a function. (1: Attendance Time, 2: View Attendance, 3: Print Information, 0: End this session)");
+            if (scan.hasNextInt()) {
+                function = scan.nextInt();                     
+            } else {
+                System.out.println("Please enter an non-negative integer.");
+                scan.next(); 
+            }
+        } while (function < 0);
         
         while (function != 0){
             switch (function){
@@ -235,17 +244,21 @@ class SchoolManager {
     static void ADD_STUDENT(Scanner scan) {
         Student new_Student;
         String name ="";
-        boolean b;
-        int ID;
+        boolean b = true;
+        int ID = Integer.MIN_VALUE;
+        System.out.print("\nPlease enter student first name: ");
+        name = scan.next();
+
         do {
-            System.out.println("\nPlease enter student first name");
-            name = scan.next();
-            System.out.println("Please enter student ID");
-            while(!scan.hasNextInt()){
-                System.out.println("Please enter an integer.");
-                scan.next();
-            }
-            ID = scan.nextInt();
+            do {
+                System.out.print("Please enter student ID: ");
+                if (scan.hasNextInt()) {
+                    ID = scan.nextInt();
+                } else {
+                    System.out.println("Please enter a non-negative integer.");
+                    scan.next();
+                }
+            } while (ID < 0 && !b);
             new_Student = new Student(name, ID);
             b = teacher.addStudent(new_Student);
         } while (!b);
@@ -256,13 +269,17 @@ class SchoolManager {
      * @param scan a scanner for multiple purposes.
      * @param ID to locate student for removal.
      */
-    static void REMOVE_STUDENT(Scanner scan, int ID){
-        System.out.println("Remove student with ID: ");
-        while (!scan.hasNextInt()) {
-            System.out.println("Remove student with ID: ");
-            scan.next();            
-        }
-        ID = scan.nextInt();
+    static void REMOVE_STUDENT(Scanner scan, int ID){        
+        do {
+            System.out.print("Remove student with ID: ");
+            if (scan.hasNextInt()) {
+                ID = scan.nextInt();                     
+            } else {
+                System.out.println("Please enter a non-negative ID.");
+                scan.next(); 
+            }
+        } while (ID < 0);
+
         System.out.println(teacher.removeStudent(ID));
     }
 
@@ -278,27 +295,40 @@ class SchoolManager {
      * @param scan a scanner for multiple purposes.
      */
     static void TAKE_ATTENDANCE(Scanner scan){
-        System.out.println("Please provide hours");
-        while(!scan.hasNextInt()){
-            System.out.println("Please enter an integer.");
-            scan.next();
-        }
-        int hours = scan.nextInt();
-    
-        System.out.println("Please provide minutes");
-        while(!scan.hasNextInt()){
-            System.out.println("Please enter an integer.");
-            scan.next();
-        }
-        int minutes = scan.nextInt();
-    
-        System.out.println("Please provide seconds");
-        while(!scan.hasNextInt()){
-            System.out.println("Please enter an integer.");
-            scan.next();
-        }
-        int seconds = scan.nextInt();
-    
+        int hours = Integer.MIN_VALUE;
+        int minutes = Integer.MIN_VALUE;
+        int seconds = Integer.MIN_VALUE;
+
+        do {
+            System.out.print("Please provide hours: ");
+            if (scan.hasNextInt()) {
+                hours = scan.nextInt();                     
+            } else {
+                System.out.println("Please enter an integer");
+                scan.next();
+            }
+        } while (hours < 0 || hours >= 24);
+        
+        do {
+            System.out.print("Please provide minutes: ");
+            if (scan.hasNextInt()) {
+                minutes = scan.nextInt();                     
+            } else {
+                System.out.println("Please enter an integer");
+                scan.next();
+            }
+        } while (minutes < 0 || minutes >= 60);
+        
+        do {
+            System.out.print("Please provide seconds: ");
+            if (scan.hasNextInt()) {
+                seconds = scan.nextInt();                     
+            } else {
+                System.out.println("Please enter an integer");
+                scan.next();
+            }
+        } while (seconds < 0 || seconds >= 60);
+
         teacher.takeAttendance(hours, minutes, seconds);
     }
     
@@ -308,12 +338,16 @@ class SchoolManager {
      * @param ID Student ID for setting attendance purpose.
      */
     static void SET_PRESENT(Scanner scan, int ID){
-        System.out.println("Set student present with ID:");
-        while(!scan.hasNextInt()){
-            System.out.println("Please enter an integer.");
-            scan.next();
-        }
-        ID = scan.nextInt();
+        do {
+            System.out.print("Set student present with ID:");
+            if (scan.hasNextInt()) {
+                ID = scan.nextInt();                     
+            } else {
+                System.out.println("Please enter an integer.");
+                scan.next();
+                }
+        } while (ID < 0);
+
         if(teacher.setPresent(ID)){
             System.out.println("Set Student with ID "+ ID + " to present successfully.");
         }
@@ -325,12 +359,16 @@ class SchoolManager {
      * @param ID Student ID for setting attendance purpose.
      */
     static void SET_ABSENT(Scanner scan, int ID){
-        System.out.println("Set student absent with ID: ");
-        while(!scan.hasNextInt()){
-            System.out.println("Please enter an integer.");
-            scan.next();
-        }
-        ID = scan.nextInt();
+        do {
+            System.out.print("Set student absent with ID: ");
+            if (scan.hasNextInt()) {
+                ID = scan.nextInt();                     
+            } else {
+                System.out.println("Please enter an integer.");
+                scan.next();
+                }
+        } while (ID < 0);
+
         if(teacher.setAbsent(ID)){
             System.out.println("Set Student with ID" + ID + " to absent successfully.");
         }
@@ -345,12 +383,17 @@ class SchoolManager {
      * @param ID Student ID for getting student purpose.
      */
     static void GET_STUDENT_BY_ID(Scanner scan, int ID){
-        System.out.println("ID to search for: ");
-        while(!scan.hasNextInt()){
-            System.out.println("Please enter an integer.");
-            scan.next();
-        }
-        ID = scan.nextInt();
+        
+        do {
+            System.out.print("ID to search for: ");
+            if (scan.hasNextInt()) {
+                ID = scan.nextInt();                     
+            } else {
+                System.out.println("Please enter an integer.");
+                scan.next();
+                }
+        } while (ID < 0);
+        
         System.out.println(teacher.getStudentById(ID));
     }
 
@@ -369,32 +412,38 @@ class SchoolManager {
 
         Teacher teacher;
         PRINT_TEACHER_LIST();
-        int index;
+        int index = Integer.MIN_VALUE;
         int size = ItManager.teacherList.size();
         do {
-            System.out.println("Please choose a teacher. (0,1,2, etc.)");
-            while (!scan.hasNextInt()) {
-                System.out.println("That's not an integer!");
-                System.out.println("Please choose a teacher. (0,1,2, etc.)");
-                scan.next(); // this is important!
-            }
-            index = scan.nextInt();
-            if(index >= size) System.out.println("Index out of bounds, please select a student between 0 and " + (size-1) + " inclusively.");
+            do {
+                System.out.print("Please choose a teacher. (0,1,2, etc.): ");
+                if (scan.hasNextInt()) {
+                    index = scan.nextInt();                     
+                } else {
+                    System.out.println("That's not an integer!");
+                    scan.next(); 
+                }
+                if(index >= size) System.out.println("Index out of bounds, please select an integer between 0 and " + (size-1) + " inclusively.");
+            } while (index < 0);
         } while (index > size-1);
 
         teacher = ItManager.teacherList.get(index);        
         System.out.println("Teacher " + teacher + " selected.");
 
-        int function;
-        System.out.println("\nPlease choose a function. \n1: Add Student, 2: Remove Student, 3: Print Student List, 4: Take Attendance, 5: Set Present, 6: Set Absent, 7: Get Student By Id, 8: Print Information, 0: End this session\n");
-        while (!scan.hasNextInt()){
-            System.out.println("Please enter an integer.");
+        int function = Integer.MIN_VALUE;
+
+        do {
             System.out.println("\nPlease choose a function. \n1: Add Student, 2: Remove Student, 3: Print Student List, 4: Take Attendance, 5: Set Present, 6: Set Absent, 7: Get Student By Id, 8: Print Information, 0: End this session\n");
-            scan.next();
-        }
-        function = scan.nextInt();
-        
-        int temp_ID = 0;
+            if (scan.hasNextInt()) {
+                function = scan.nextInt();                     
+            } else {
+                System.out.println("Please enter an non-negative integer.");
+                scan.next(); 
+            }
+        } while (function < 0);
+
+        int temp_ID = Integer.MIN_VALUE;
+
         while (function != 0 ){
             switch (function){
                 case 1: // Add Student and add to the list
@@ -462,17 +511,20 @@ class SchoolManager {
      */
     static void REMOVE_TEACHER(Scanner scan){
         PRINT_STUDENT_LIST();
-        while(!scan.hasNextInt()){
+        int index = Integer.MIN_VALUE; 
+        do {
             System.out.println("Please enter an integer.");
-            scan.next();
-        }
-        int index = scan.nextInt(); 
-        if (index < ItManager.teacherList.size()) { 
-            Teacher t = ItManager.teacherList.get(index);
-            itManager.removeTeacher(t);
-        } else {
-            System.out.println("Teacher not found.");
-        }
+            if (scan.hasNextInt()) {
+                index = scan.nextInt();                     
+            } else {
+                System.out.println("Please enter a non-negative ID.");
+                scan.next(); 
+            }
+            if (index < ItManager.teacherList.size()) { 
+                // Teacher t = ItManager.teacherList.get(index);
+                itManager.removeTeacher(((Teacher) ItManager.teacherList.get(index)));
+            }
+        } while (index < 0);
 
     }
     
@@ -482,14 +534,26 @@ class SchoolManager {
      */
     static void ADD_TEACHER(Scanner scan){
         System.out.println("Please provide teacher name: ");
+
         String name = scan.nextLine();
-        System.out.println("Please provide teacher userID: ");
-        while(!scan.hasNextInt()){
-            System.out.println("Please enter an integer.");
-            scan.next();
-        }
-        int ID = scan.nextInt();
-        itManager.addTeacher(new Teacher(name, ID));
+        String add = "Failed";
+        int ID = Integer.MIN_VALUE;
+
+        do {
+            do {
+                System.out.println("Please provide teacher userID: ");
+                if (scan.hasNextInt()) {
+                    ID = scan.nextInt();
+                } else {
+                    System.out.println("Please enter a non-negative integer.");
+                    scan.next();
+                }
+                if (ID < 0) {System.out.println("Please enter valid teacher userID.");}
+            } while (ID < 0);
+  
+            add = itManager.addTeacher(new Teacher(name, ID));
+        } while (add.equals("Failed"));
+
     }
     
     /** 
@@ -522,14 +586,17 @@ class SchoolManager {
 
         int temp_ID = 0;
 
-        int function;
-        System.out.println("\nPlease choose a function. \n1: Add Student to list, 2: Remove Student, 3: Get Student By ID, 4: Print Student List, 5: Add Teacher to List, 6: Remove teacher, 7:Get Teacher By ID, 8: Print Teacher, 0: End this session\n");
-        while (!scan.hasNextInt()){
-            System.out.println("Please enter an integer.");
+        int function = Integer.MIN_VALUE;
+
+        do {
             System.out.println("\nPlease choose a function. \n1: Add Student to list, 2: Remove Student, 3: Get Student By ID, 4: Print Student List, 5: Add Teacher to List, 6: Remove teacher, 7:Get Teacher By ID, 8: Print Teacher, 0: End this session\n");
-            scan.next();
-        }
-        function = scan.nextInt();
+            if (scan.hasNextInt()) {
+                function = scan.nextInt();                     
+            } else {
+                System.out.println("Please enter an non-negative integer.");
+                scan.next(); 
+            }
+        } while (function < 0);
         
         while (function != 0 ){
             switch (function){
